@@ -156,6 +156,31 @@ const DataProviderFuncComp = ({ children }) => {
 
   };
 
+  // 📌 Add this in DataContext *below apiPost*
+  const apiPostPublic = async (endpoint, body = {}, showToast = true) => {
+    try {
+      const res = await axios.post(`${API_BASE_URL}${endpoint}`, body, {
+        headers: { "Content-Type": "application/json" },
+        timeout: 10000,
+      });
+      return res?.data;
+    } catch (error) {
+      const message =
+        error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong.";
+
+      if (showToast) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: message,
+        });
+      }
+      return null;
+    }
+  };
 
   const logoutFunc = async () => {
     try {
@@ -221,7 +246,7 @@ const DataProviderFuncComp = ({ children }) => {
       const config = {
         headers: { Authorization: `Bearer ${freshToken}` },
         timeout: 10000,
-        ...optionsOrBody, 
+        ...optionsOrBody,
       };
 
       const res = await axios.delete(`${API_BASE_URL}${endpoint}`, config);
@@ -240,36 +265,36 @@ const DataProviderFuncComp = ({ children }) => {
       setButton?.(false);
     }
   };
- const apiPostForm = async (endpoint, formData, setButton) => {
-  try {
-    setButton(true);
+  const apiPostForm = async (endpoint, formData, setButton) => {
+    try {
+      setButton(true);
 
-    const freshToken = await checkSession(); // Get the fresh token
-    if (!freshToken) return null;
+      const freshToken = await checkSession(); // Get the fresh token
+      if (!freshToken) return null;
 
-    const res = await axios.post(`${API_BASE_URL}${endpoint}`, formData, {
-      headers: {
-        Authorization: `Bearer ${freshToken}`,
-        "Content-Type": "multipart/form-data", // Ensure this is set for file uploads
-      },
-    });
+      const res = await axios.post(`${API_BASE_URL}${endpoint}`, formData, {
+        headers: {
+          Authorization: `Bearer ${freshToken}`,
+          "Content-Type": "multipart/form-data", // Ensure this is set for file uploads
+        },
+      });
 
-    setButton(false);
-    return res.data;
-  } catch (err) {
-    let message = "Something went wrong. Please try again.";
-    if (err.response?.data?.error) {
-      message = err.response.data.error;
+      setButton(false);
+      return res.data;
+    } catch (err) {
+      let message = "Something went wrong. Please try again.";
+      if (err.response?.data?.error) {
+        message = err.response.data.error;
+      }
+      Toast.show({
+        type: "error",
+        text1: message,
+      });
+
+      setButton(false);
+      return null;
     }
-    Toast.show({
-      type: "error",
-      text1: message,
-    });
-
-    setButton(false);
-    return null;
-  }
-};
+  };
 
 
   return (
@@ -289,7 +314,7 @@ const DataProviderFuncComp = ({ children }) => {
         apiPut,
         apiDelete,
         socket,
-        apiPostForm
+        apiPostForm, apiPostPublic
       }}
     >
       {children}

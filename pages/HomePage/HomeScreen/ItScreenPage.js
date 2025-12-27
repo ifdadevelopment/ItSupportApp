@@ -14,10 +14,6 @@ import * as Sharing from "expo-sharing";
 import dayjs from "dayjs";
 import MyHeader from "../../../component/Header/Header";
 import { DataContext } from "../../../context";
-
-/* -----------------------------------------
-   File Helpers
------------------------------------------ */
 const getFileType = (url = "") => {
   const ext = url.split(".").pop()?.toLowerCase();
 
@@ -43,20 +39,12 @@ const getIconByType = (type) => {
       return "document-outline";
   }
 };
-
-/* -----------------------------------------
-   Main Component
------------------------------------------ */
 const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
   const { socket, user } = useContext(DataContext);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
 
   if (!data) return null;
-
-  /* -----------------------------------------
-     Socket Listeners
-  ----------------------------------------- */
   useEffect(() => {
     if (!socket) return;
 
@@ -87,22 +75,14 @@ const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
         return "#9CA3AF";
     }
   };
-
-  /* -----------------------------------------
-      Open Attachment
-  ----------------------------------------- */
   const handleOpenAttachment = async (file, type) => {
     try {
       if (!file?.url) return alert("Invalid file URL");
-
-      // 🔥 Open image preview modal
       if (type === "image") {
         setPreviewImage(file.url);
         setPreviewVisible(true);
         return;
       }
-
-      // 🔥 For docs — download + share
       const fileName = file.originalName || file.url.split("/").pop();
       const localUri = FileSystem.documentDirectory + fileName;
 
@@ -117,10 +97,6 @@ const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
       alert("Unable to open attachment.");
     }
   };
-
-  /* -----------------------------------------
-      Render Ticket Card
-  ----------------------------------------- */
   const renderTicketCard = ({ item }) => (
     <TouchableOpacity
       style={styles.ticketCard}
@@ -143,16 +119,12 @@ const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
           <Ionicons name="location-outline" size={16} color="#6B7280" />
           <Text style={styles.metaText}>{item.location}</Text>
         </View>
-
-        {/* PC Info */}
         {item?.pc?.tagNoCpu && (
           <View style={styles.metaRow}>
             <Ionicons name="desktop-outline" size={16} color="#6B7280" />
             <Text style={styles.metaText}>{item.pc.tagNoCpu}</Text>
           </View>
         )}
-
-        {/* Resolved Status */}
         <Text
           style={[
             styles.metaText,
@@ -166,8 +138,6 @@ const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
             : "Not resolved yet"}
         </Text>
       </View>
-
-      {/* Attachments */}
       {item.attachments?.length > 0 && (
         <View style={{ marginTop: 12 }}>
           <Text style={{ fontSize: 14, fontWeight: "600", marginBottom: 6 }}>
@@ -215,8 +185,6 @@ const TechnicianHomePage = ({ navigation, data, getDataFunc }) => {
         ListHeaderComponent={
           <>
             <Text style={styles.sectionTitle}>Overview</Text>
-
-            {/* Summary Stats */}
             <View style={styles.summaryRow}>
               <SummaryCard
                 label="Total Tickets"

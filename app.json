@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "It Support",
+    "name": "IT Support",
     "slug": "it-support",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,11 +17,15 @@
     },
     "android": {
       "softwareKeyboardLayoutMode": "resize",
-      "package": "com.maheshwarbehera99.myapp"
+      "package": "com.maheshwarbehera99.myapp",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
+    "plugins": [
+      "expo-notifications"
+    ],
     "extra": {
       "eas": {
         "projectId": "450a5841-86d7-4e02-987e-45b4a84d5e83"

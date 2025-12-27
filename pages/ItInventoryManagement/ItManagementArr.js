@@ -110,19 +110,70 @@ export const subCategoryMapping = {
     { label: "CCTV Accessories", icon: "videocam-outline" }
   ]
 };
+// ------------------- CATEGORY FIELD GROUPS -------------------
+export const DISPLAY_FIELD_KEYS = new Set([
+  "manufactureBy",
+  "displayTag",
+  "department",
+  "mainLocation",
+  "location",
+  "purchaseDate",
+  "warrantyExpiry",
+  "status",
+  "price",
+]);
+
+export const COMPUTER_FIELD_KEYS = new Set([
+  "manufactureBy",
+  "tagNoCpu",
+  "macAddress",
+  "operatingSystem",
+  "software",
+  "ram",
+  "storage",
+  "processor",
+  "department",
+  "mainLocation",
+  "location",
+  "purchaseDate",
+  "warrantyExpiry",
+  "status",
+  "domain",
+  "price",
+]);
+
+export const REQUIRED_FOR_DISPLAY = new Set([
+  "manufactureBy",
+  "displayTag",
+  "mainLocation",
+  "location",
+]);
+
+export const REQUIRED_FOR_COMPUTERS = new Set([
+  "manufactureBy",
+  "tagNoCpu",
+  "operatingSystem",
+  "ram",
+  "storage",
+  "processor",
+  "macAddress",
+  "mainLocation",
+  "location",
+  "domain",
+]);
 
 
 const itInventorySteps = [
   [
-    { key: "manufactureBy", label: "Item Name / Manufacturer", type: "text", placeholder: "Enter item name", icon: "cube", required: true },
-    { key: "brand", label: "Brand", type: "text", placeholder: "Enter brand", icon: "pricetag", required: true },
-    { key: "model", label: "Model", type: "text", placeholder: "Enter model", icon: "pricetags", required: false },
     { key: "category", label: "Category", type: "picker", icon: "list", required: true,
       options: [
         { icon: "laptop-outline", label: "Computers", key: "Computers" },
         { icon: "tv-outline", label: "Display", key: "Display" },
       ]
     },
+    { key: "manufactureBy", label: "Item Name / Manufacturer", type: "text", placeholder: "Enter item name", icon: "cube", required: true },
+    { key: "brand", label: "Brand", type: "text", placeholder: "Enter brand", icon: "pricetag", required: true },
+    { key: "model", label: "Model", type: "text", placeholder: "Enter model", icon: "pricetags", required: false },
   ],
   [
     { key: "tagNoCpu", label: "Tag No (CPU)", type: "text", placeholder: "Enter CPU tag no", icon: "desktop-outline", required: true },
@@ -189,5 +240,38 @@ const itInventorySteps = [
     },
   ],
 ];
+export const getDynamicItInventorySteps = (category = "Computers") => {
+  const selectedSet =
+    category === "Display" ? DISPLAY_FIELD_KEYS : COMPUTER_FIELD_KEYS;
+
+  const requiredSet =
+    category === "Display" ? REQUIRED_FOR_DISPLAY : REQUIRED_FOR_COMPUTERS;
+  const filteredFields = itInventorySteps
+    .flat()
+    .filter((field) => {
+      if (!field.key) return true;
+      if (field.key === "category") return true;
+      const inDisplay = DISPLAY_FIELD_KEYS.has(field.key);
+      const inComputer = COMPUTER_FIELD_KEYS.has(field.key);
+
+      if (inDisplay || inComputer) {
+        return selectedSet.has(field.key);
+      }
+      return true;
+    })
+    .map((field) => {
+      if (!field.key) return field;
+      if (requiredSet.has(field.key)) {
+        return { ...field, required: true };
+      }
+      return field;
+    });
+  const steps = [];
+  for (let i = 0; i < filteredFields.length; i += 5) {
+    steps.push(filteredFields.slice(i, i + 5));
+  }
+
+  return steps;
+};
 
 export default itInventorySteps;

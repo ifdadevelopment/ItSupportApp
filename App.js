@@ -36,6 +36,8 @@ import InventoryItemHistoryPage from './pages/ItemInventoryManagement/ItemDispla
 import AddItemKeyForm from './pages/ItemKeyAdd/ItemKeyAdd';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync } from './component/notification/Notification';
+import ForgotPassword from "./component/ForgotPassword";
+import ResetPassword from "./component/ResetPassword";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -43,11 +45,11 @@ const Tab = createMaterialTopTabNavigator();
 
 
 Notifications.setNotificationHandler({
-handleNotification: async () => ({
-  shouldShowAlert: true,
-  shouldPlaySound: false,
-  shouldSetBadge: false,
-}),
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
 });
 
 
@@ -62,7 +64,7 @@ function Main() {
     checkSession();
   }, []);
 
-   React.useEffect(() => {
+  React.useEffect(() => {
     registerForPushNotificationsAsync();
 
     const subscription = Notifications.addNotificationReceivedListener(notification => {
@@ -115,6 +117,8 @@ function Main() {
           <>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="ResetPassword" component={ResetPassword} />
             <Stack.Screen name="RaiseTicket" component={TicketEntryForm} />
             <Stack.Screen name="TakenInventoryScreen" component={TakenInventoryScreen} />
             <Stack.Screen name="PurchaseEntryForm" component={PurchaseEntryForm} />

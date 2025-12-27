@@ -129,10 +129,6 @@ const TicketDetailsScreen = ({ navigation, route }) => {
             contentContainerStyle={{ paddingBottom: 100 }}
             keyboardShouldPersistTaps="handled"
           >
-            {/* === Ticket Content === */}
-
-
-            {/* ... other UI blocks ... */}
             <View style={styles.headerCard}>
               <Ionicons name="document-text-outline" size={28} color="#1E3A8A" />
               <View style={{ marginLeft: 12, flex: 1 }}>
@@ -210,10 +206,7 @@ const TicketDetailsScreen = ({ navigation, route }) => {
                   </Text>
                 </View>
               </View>
-
-              {/* PC Serial Number Section */}
               <View style={styles.infoRow}>
-                {/* PC Icon */}
                 <Ionicons name="desktop-outline" size={30} color="#6B7280" />
 
                 <View style={styles.infoContent}>
@@ -224,8 +217,6 @@ const TicketDetailsScreen = ({ navigation, route }) => {
                 </View>
               </View>
             </View>
-
-            {/* Comments */}
             {<View style={styles.sectionCard}>
               <Text style={styles.sectionLabel}>Comments</Text>
               {ticket?.data?.comments?.length === 0 ? (
@@ -245,10 +236,9 @@ const TicketDetailsScreen = ({ navigation, route }) => {
                 ))
               )}
             </View>}
-            {/* Status Actions */}
             {user.user_type != 'user' ? <View style={{ marginVertical: 10 }}>
               {statusButtons
-                .filter((btn) => btn.status !== ticket.data.status) // exclude current status
+                .filter((btn) => btn.status !== ticket.data.status) 
                 .map((btn, idx) => (
                   <CustomButton
                     key={idx}

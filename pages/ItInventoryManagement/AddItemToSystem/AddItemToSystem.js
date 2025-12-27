@@ -18,7 +18,7 @@ import LoadingSpinner from "../../../component/LoadingSpinner/LoadingSpinner";
 
 const validationSchema = Yup.object().shape({
     itemId: Yup.string().required("Item is required"),
-    systemId: Yup.string().required("System is required"),
+    // systemId: Yup.string().required("System is required"),
     quantity: Yup.number()
         .typeError("Quantity must be a number")
         .positive("Must be positive")
@@ -62,9 +62,11 @@ const AddItemToSystemForm = ({ navigation, route }) => {
         <>
             <MyHeader navigation={navigation} />
             <Formik
-                initialValues={{ itemId: "", systemId: id, quantity: "" }}
+                initialValues={{ itemId: "", systemId : id?._id, quantity: "" }}
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting, setErrors }) => {
+                    console.log("selectedItem && enteredQuantity > selectedItem.quantity")
+                    console.log(values);
                     const selectedItem = filteredItems.find((i) => i._id === values.itemId);
                     const enteredQuantity = Number(values.quantity);
 
@@ -133,7 +135,6 @@ const AddItemToSystemForm = ({ navigation, route }) => {
                                 )}
                             </Text>
                         </TouchableOpacity>
-
                         {/* ITEM MODAL */}
                         <Modalize
                             ref={itemModalRef}
